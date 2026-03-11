@@ -32,10 +32,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + userEntity.getRole());
 
         // 3️⃣ Créer un UserDetails avec username, password encodé et rôle
-        return new org.springframework.security.core.userdetails.User(
-                userEntity.getUserName(),     // username
-                userEntity.getPassword(),     // password déjà encodé avec BCrypt
-                Collections.singleton(authority) // collection de rôles
-        );
+        return User.builder()
+                .username(userEntity.getUserName())
+                .password(userEntity.getPassword())
+                .authorities(authority)
+                .build();
     }
 }
