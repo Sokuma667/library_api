@@ -33,7 +33,8 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                    .requestMatchers( "/auth/login","/auth/**","/swagger-ui/**","/swagger-ui.html","/v3/api-docs/**","/v3/api-docs",
+                        "/swagger-resources/**","/webjars/**").permitAll()
 
                 // USER peut seulement faire GET
                 .requestMatchers(HttpMethod.GET, "/books/**").hasAnyRole("USER", "ADMIN")

@@ -7,6 +7,8 @@ import lei.ibam.library.book.service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -26,9 +28,10 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BookEntity>> getAllBooks(){
-        return new ResponseEntity<>(bookService.getAllBook(),HttpStatus.OK);
-    }
+    public ResponseEntity<Page<BookEntity>> getAllBooks(Pageable pageable){
+    return new ResponseEntity(bookService.getAllBook(pageable),HttpStatus.OK);
+    }   
+
 
     @GetMapping("/{id}")
     public ResponseEntity<BookEntity> getBookByIds(@PathVariable Long id){
