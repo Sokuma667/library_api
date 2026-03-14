@@ -38,6 +38,8 @@ public class BookService {
         BookEntity book = new BookEntity();
           book.setName(bookInputDto.getBookName());
           book.setPages(bookInputDto.getBookPages());
+          book.setCategory(bookInputDto.getBookCategory());
+          book.setAuthor(bookInputDto.getBookAuthor());
 
         return bookRepository.save(book);
 
@@ -62,6 +64,8 @@ public class BookService {
               .map(book1 -> {
                book1.setName(book.getBookName());
               book1.setPages(book.getBookPages());
+              book1.setAuthor(book.getBookAuthor());
+              book1.setCategory(book.getBookCategory());
 
               boolean bookExists= bookRepository.findByNameAndPages(book1.getName(),book1.getPages()).isPresent();
               if (bookExists){
