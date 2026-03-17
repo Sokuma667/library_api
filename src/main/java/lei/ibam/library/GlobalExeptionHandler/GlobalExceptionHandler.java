@@ -57,18 +57,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.CONFLICT);
     }
 
+    private InvalidFormatException extractInvalidFormat(Throwable t) {
+        if (t == null) return null;
+
+        if (t instanceof InvalidFormatException ife) {
+            return ife;
+        }
+
+        // Jackson peut encapsuler InvalidFormatException dans MismatchedInputException
+        if (t instanceof JsonMappingException jme && jme.getCause() instanceof InvalidFormatException) {
+            return (InvalidFormatException) jme.getCause();
+        }
+
+        return extractInvalidFormat(t.getCause());
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiError> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
-        String message = "Requête invalide.Categorie valide: ROMAN,BD,MANGA,SCIENCE,LITTERATURE,HISTOIRE, ECONOMIE,GEOGRAPHIE,INFORMATIQUE\"";
-
-        Throwable cause = ex.getCause();
-        if (cause instanceof InvalidFormatException invalidFormat) {
-            if (isFieldInPath(invalidFormat, "bookCategory")) {
-                message = "Veuillez choisir une categorie valide ";
-            } else {
-                message = "Format de donnée invalide";
-            }
-        }
+        String message = "Requête invalide";
 
         ApiError apiError = new ApiError();
         apiError.setMessage(message);
@@ -76,15 +82,6 @@ public class GlobalExceptionHandler {
         apiError.setTimestamp(LocalDateTime.now());
 
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
-    }
-
-    private boolean isFieldInPath(InvalidFormatException ex, String fieldName) {
-        for (JsonMappingException.Reference ref : ex.getPath()) {
-            if (fieldName.equals(ref.getFieldName())) {
-                return true;
-            }
-        }
-        return false;
     }
 
 

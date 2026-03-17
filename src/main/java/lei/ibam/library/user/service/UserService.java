@@ -29,9 +29,14 @@ public class UserService {
            throw new UserAlreadyExistsExeption("Cet utilisateur existe déjà");
        }
        UserEntity user = new UserEntity();
+       user.setFirstName(userInputDto.getUserFirstName());
+       user.setLastName(userInputDto.getUserLastName());
        user.setUserName(userInputDto.getUserInputName());
+       user.setPhoneNumber(userInputDto.getUserPhoneNumber());
+        user.setRole(Role.USER);
+        user.setStatut(userInputDto.getUserStatut());
        user.setPassword(passwordEncoder.encode(userInputDto.getPasswordInput()));
-       user.setRole(Role.USER);
+
 
        return userRepository.save(user);
 
