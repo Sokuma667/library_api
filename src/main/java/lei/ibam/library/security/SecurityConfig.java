@@ -48,7 +48,7 @@ public class SecurityConfig {
                 //pour la table users
 
                 .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/users/**").hasRole("ADMIN")
+                .requestMatchers( "/users/register/**").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/users/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
 

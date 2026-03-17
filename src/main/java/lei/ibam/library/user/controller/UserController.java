@@ -21,7 +21,7 @@ public class UserController {
         this.userSerice = userSerice;
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<UserEntity> createUsers(@Valid @RequestBody UserInputDto userInputDto){
         UserEntity createdUser = userSerice.createUser(userInputDto);
         return  new ResponseEntity<>(createdUser, HttpStatus.CREATED);
