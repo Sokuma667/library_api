@@ -23,6 +23,16 @@ public class BookEntity {
     @Enumerated(EnumType.STRING)
     private Category category;
 
+    private int quantity;
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public String getAuthor() {
         return author;
     }

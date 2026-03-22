@@ -85,4 +85,26 @@ public class GlobalExceptionHandler {
     }
 
 
+
+    @ExceptionHandler(BookCategoryNotExistsException.class)
+    public ResponseEntity<ApiError> handleBookCategoryNotExistsException(BookCategoryNotExistsException ex) {
+
+        ApiError apiError = new ApiError();
+        apiError.setMessage(ex.getMessage());
+        apiError.setCode(HttpStatus.NOT_FOUND.value());
+        apiError.setTimestamp(LocalDateTime.now());
+        // On renvoie le message de l'exception avec le status 404
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(BookNotInStockException.class)
+    public ResponseEntity<ApiError> handleBookNotInStockException(BookNotInStockException ex) {
+
+        ApiError apiError = new ApiError();
+        apiError.setMessage(ex.getMessage());
+        apiError.setCode(HttpStatus.REQUEST_TIMEOUT.value());
+        apiError.setTimestamp(LocalDateTime.now());
+        // On renvoie le message de l'exception avec le status 404
+        return new ResponseEntity<>(apiError, HttpStatus.REQUEST_TIMEOUT);
+    }
 }

@@ -3,6 +3,7 @@ package lei.ibam.library.book.controller;
 import jakarta.validation.Valid;
 import lei.ibam.library.book.dto.BookInputDto;
 import lei.ibam.library.book.model.BookEntity;
+import lei.ibam.library.book.model.Category;
 import lei.ibam.library.book.service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,4 +56,7 @@ public class BookController {
          }
          return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-}
+
+
+
+    }
