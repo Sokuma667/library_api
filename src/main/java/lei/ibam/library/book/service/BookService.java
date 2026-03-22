@@ -2,14 +2,17 @@ package lei.ibam.library.book.service;
 
 import jakarta.validation.Valid;
 import lei.ibam.library.GlobalExeptionHandler.BookAlreadyExistsException;
+import lei.ibam.library.GlobalExeptionHandler.BookCategoryNotExistsException;
 import lei.ibam.library.GlobalExeptionHandler.BookNotExistsException;
 import lei.ibam.library.book.dto.BookInputDto;
 import lei.ibam.library.book.model.BookEntity;
+import lei.ibam.library.book.model.Category;
 import lei.ibam.library.book.repository.BookRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +43,7 @@ public class BookService {
           book.setPages(bookInputDto.getBookPages());
           book.setCategory(bookInputDto.getBookCategory());
           book.setAuthor(bookInputDto.getBookAuthor());
+          book.setQuantity(bookInputDto.getBookQuantity());
 
         return bookRepository.save(book);
 
@@ -88,4 +92,6 @@ public class BookService {
       }
        return false;
     }
+
+
 }

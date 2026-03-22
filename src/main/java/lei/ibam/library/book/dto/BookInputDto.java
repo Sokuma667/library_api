@@ -29,6 +29,19 @@ public class BookInputDto {
     @Enumerated(EnumType.STRING)
     public Category bookCategory;
 
+    @NotNull(message = "veuillez renseigner la quantité en stocke !!!")
+    @Positive
+    public int bookQuantity;
+
+    public int getBookQuantity() {
+        return bookQuantity;
+    }
+
+    public void setBookQuantity(int bookQuantity) {
+        this.bookQuantity = bookQuantity;
+    }
+
+
     public Category getBookCategory() {
         return bookCategory;
     }
@@ -36,9 +49,6 @@ public class BookInputDto {
     public void setBookCategory(Category bookCategory) {
         this.bookCategory = bookCategory;
     }
-
-
-
 
 
     public String getBookAuthor() {
