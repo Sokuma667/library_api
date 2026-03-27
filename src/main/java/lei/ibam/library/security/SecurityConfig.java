@@ -56,6 +56,8 @@ public class SecurityConfig {
 
                     .requestMatchers(HttpMethod.POST,"/books/borrow/**").hasRole("USER")
                     .requestMatchers(HttpMethod.GET,"/myBorrowedBooks/").hasAnyRole("USER","ADMIN")
+                    .requestMatchers(HttpMethod.PUT,"/return/update/{id}").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET,"/borrowedBooks").hasRole("ADMIN")
 
 
                 // Toutes les autres requêtes nécessitent l'authentification

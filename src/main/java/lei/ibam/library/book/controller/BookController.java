@@ -2,9 +2,11 @@ package lei.ibam.library.book.controller;
 
 import jakarta.validation.Valid;
 import lei.ibam.library.book.dto.BookInputDto;
+import lei.ibam.library.book.dto.BookOutputDto;
 import lei.ibam.library.book.model.BookEntity;
 import lei.ibam.library.book.model.Category;
 import lei.ibam.library.book.service.BookService;
+import lei.ibam.library.view.bookView.model.BookView;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,14 +31,24 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<BookEntity>> getAllBooks(Pageable pageable){
-    return new ResponseEntity(bookService.getAllBook(pageable),HttpStatus.OK);
-    }   
+    public ResponseEntity<Page<BookOutputDto>> getAllBooks(Pageable pageable){
+        Page<BookOutputDto> booksDto = bookService.getAllBook(pageable)
+                .map(bookView -> {
+                    BookOutputDto bookOutputDto = new BookOutputDto();
+                    bookOutputDto.setBookOutputName(bookView.getName());
+                    bookOutputDto.setBookOutputPage(bookView.getPages());
+                    bookOutputDto.setBookOutputAuthor(bookView.getAuthor());
+                    bookOutputDto.setBookOutputCategory(bookView.getCategory());
+                    bookOutputDto.setBookOutputQuantity(bookView.getQuantity());
+                    return bookOutputDto;
+                });
+        return ResponseEntity.ok(booksDto);
+    }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookEntity> getBookByIds(@PathVariable Long id){
-       BookEntity bookById = bookService.getBookById(id);
+    public ResponseEntity<BookOutputDto> getBookByIds(@PathVariable Long id){
+       BookOutputDto bookById = bookService.getBookById(id);
        return ResponseEntity.ok(bookById);
 
     }

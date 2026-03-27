@@ -2,11 +2,14 @@ package lei.ibam.library.user.controller;
 
 import jakarta.validation.Valid;
 import lei.ibam.library.user.dto.UserInputDto;
+import lei.ibam.library.user.dto.UserOutputDto;
 import lei.ibam.library.user.model.UserEntity;
 import lei.ibam.library.user.service.UserService;
+import lei.ibam.library.view.userView.model.UserView;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,13 +31,13 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserEntity>> getUsers(){
+    public ResponseEntity<List<UserView>> getUsers(){
         return new ResponseEntity<>(userSerice.getUser(),HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserEntity> getUsersById(@PathVariable Long id){
-        return new ResponseEntity<>(userSerice.getUserById(id),HttpStatus.OK);
+    @GetMapping("/{username}")
+    public ResponseEntity<UserOutputDto> getUsersById(@PathVariable Authentication authentication) {
+        return new ResponseEntity<>(userSerice.getByUserName(authentication.getName()),HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
