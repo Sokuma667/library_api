@@ -107,4 +107,16 @@ public class GlobalExceptionHandler {
         // On renvoie le message de l'exception avec le status 404
         return new ResponseEntity<>(apiError, HttpStatus.REQUEST_TIMEOUT);
     }
+
+    @ExceptionHandler(BookAlreadyReturnedException.class)
+    public ResponseEntity<ApiError> handleBookAlreadyReturnedException(BookAlreadyReturnedException ex) {
+
+        ApiError apiError = new ApiError();
+        apiError.setMessage(ex.getMessage());
+        apiError.setCode(HttpStatus.ALREADY_REPORTED.value());
+        apiError.setTimestamp(LocalDateTime.now());
+        // On renvoie le message de l'exception avec le status 404
+        return new ResponseEntity<>(apiError, HttpStatus.ALREADY_REPORTED);
+
+    }
 }

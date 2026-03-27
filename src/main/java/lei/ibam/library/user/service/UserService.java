@@ -3,9 +3,12 @@ package lei.ibam.library.user.service;
 import lei.ibam.library.GlobalExeptionHandler.UserAlreadyExistsExeption;
 import lei.ibam.library.GlobalExeptionHandler.UserNotExistsExeption;
 import lei.ibam.library.user.dto.UserInputDto;
+import lei.ibam.library.user.dto.UserOutputDto;
 import lei.ibam.library.user.model.Role;
 import lei.ibam.library.user.model.UserEntity;
 import lei.ibam.library.user.repository.UserRepository;
+import lei.ibam.library.view.userView.model.UserView;
+import lei.ibam.library.view.userView.repository.UserViewRepo;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +18,12 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserViewRepo userViewRepo;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserViewRepo userViewRepo) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userViewRepo = userViewRepo;
     }
 
     //creation d'un user
@@ -44,14 +49,22 @@ public class UserService {
     }
 
     //Voir les users
-    public List<UserEntity> getUser(){
-        return userRepository.findAll();
-    }
+    public List<UserView> getUser(){return userViewRepo.findAll();}
 
-    //Voir un user en connaissant son id
-    public UserEntity getUserById(Long id){
-        return userRepository.findById(id)
+    //Voir un user en connaissant son id ou username
+    public UserOutputDto getByUserName(String username){
+        UserView user = userViewRepo.findByUserName(username)
                 .orElseThrow(()->new UserNotExistsExeption("Cet user n'existe pas !!!"));
+
+        UserOutputDto userOutputDto = new UserOutputDto();
+        userOutputDto.setFisrtName(user.getFirstName());
+        userOutputDto.setLastName(user.getLastName());
+        userOutputDto.setStatut(user.getStatut());
+        userOutputDto.setPhoneNumber(user.getPhoneNumber());
+
+        return userOutputDto;
+
+
     }
 
     //Mettre les infos d'un utilisateurs à jour

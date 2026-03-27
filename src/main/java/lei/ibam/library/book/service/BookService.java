@@ -5,15 +5,19 @@ import lei.ibam.library.GlobalExeptionHandler.BookAlreadyExistsException;
 import lei.ibam.library.GlobalExeptionHandler.BookCategoryNotExistsException;
 import lei.ibam.library.GlobalExeptionHandler.BookNotExistsException;
 import lei.ibam.library.book.dto.BookInputDto;
+import lei.ibam.library.book.dto.BookOutputDto;
 import lei.ibam.library.book.model.BookEntity;
 import lei.ibam.library.book.model.Category;
 import lei.ibam.library.book.repository.BookRepository;
 
+import lei.ibam.library.view.bookView.model.BookView;
+import lei.ibam.library.view.bookView.repository.BookViewRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.awt.print.Book;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,9 +25,11 @@ import java.util.Optional;
 @Service
 public class BookService {
     private final BookRepository bookRepository;
+    private final BookViewRepo bookViewRepo;
 
-    public BookService(BookRepository bookRepository) {
+    public BookService(BookRepository bookRepository, BookViewRepo bookViewRepo) {
         this.bookRepository = bookRepository;
+        this.bookViewRepo = bookViewRepo;
     }
 
 
@@ -51,14 +57,23 @@ public class BookService {
     }
 
     //Affichage de livres
-    public Page <BookEntity> getAllBook(Pageable pageable){
-        return bookRepository.findAll(pageable);
+    public Page <BookView> getAllBook(Pageable pageable){
+        return bookViewRepo.findAll(pageable);
     }
 
     //Afficher un livre en connaissant son id
-    public BookEntity getBookById(Long id) {
-        return bookRepository.findById(id)
+    public BookOutputDto getBookById(Long id) {
+       BookView bookView = bookViewRepo.findById(id)
                 .orElseThrow(() -> new BookNotExistsException("Ce livre n'existe pas"));
+
+        BookOutputDto bookOutputDto = new BookOutputDto();
+        bookOutputDto.setBookOutputName(bookView.getName());
+        bookOutputDto.setBookOutputPage(bookView.getPages());
+        bookOutputDto.setBookOutputAuthor(bookView.getAuthor());
+        bookOutputDto.setBookOutputCategory(bookView.getCategory());
+        bookOutputDto.setBookOutputQuantity(bookView.getQuantity());
+
+        return bookOutputDto;
     }
 
 
